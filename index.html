@@ -1,0 +1,49 @@
+<!doctype html> 
+<html> 
+<head> 
+ <title>Winter Wrap Up</title> 
+ <meta charset="utf-8" />
+ <style>
+  body { margin: 0; font-family: sans-serif; }
+  #description {
+   position: absolute;
+   bottom: 0; right: 0;
+   width: 24em; height: .8em;
+   padding: 1.2em .6em 0;
+   overflow: hidden;
+   background-color: rgba(255,255,255,.3);
+  } 
+  #description:hover {
+    width: 24em; height: 15em;
+  }
+  #hint {
+   position: absolute;
+   top: 0; right: 0;
+   padding: .3em;
+  }
+ </style>
+</head> 
+<body> 
+ <canvas id="c"></canvas>
+<div id="description">
+<div id="hint">↑</div>
+<p>
+Before spring can start winter has to be cleaned up.
+It's your job to move the remaining snow piles to spots of grass
+that have died during winter.<br>
+Move with the arrow keys and press any other key to undo the last move.
+</p>
+<p>Demo on <a href="http://js1k.com/2013-spring/demo/1460">js1k</a>.<br>
+Code:  <a href="full.js">full</a>, <a href="min.js">minified</a>, <a href="1k.js">1k</a><br>
+Converter: <a href="format.py">minification</a>, <a href="compress.py">compression</a>
+</p>
+</div>
+ <script>
+  var b = document.body;
+  var c = document.getElementsByTagName('canvas')[0];
+  var a = c.getContext('2d');
+  document.body.clientWidth; // fix bug in webkit: http://qfox.nl/weblog/218
+ </script>
+ <script src="1k.js"></script>
+</body>
+</html>
