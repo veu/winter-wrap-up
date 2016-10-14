@@ -1,0 +1,15 @@
+{
+  "name": "winter-wrap-up",
+  "version": "1.0.0",
+  "description": "Tiny game similar to Sokoban",
+  "author": "Rebecca",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
+    "gulp-size": "^2.1.0",
+    "gulp-zip": "^3.2.0"
+  }
+}

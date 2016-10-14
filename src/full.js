@@ -62,27 +62,11 @@
 //) Global vars: A   C         H                   R S       W
 //)              a   c         h         m n o p   r         w   y z
 //)
-//)// Disclaimer /////////////////////////////////////////////////////////
-//)
-//) Some parts of this code are beyond disturbing. But hey,
-//) you'll probably still learn more reading this than w3schools. :P
-//)
-//)///////////////////////////////////////////////////////////////////////
-//)
-//) The (ugly) minification and compression scripts can be found at
-//)
-//)        http://games.23inch.de/winterwrapup
-//)
-//) The following lines are included in the compression part to avoid
-//) including the character M, putting braces around everything and to
-//) save a semicolon.
-
-// with(a) with(Math) ...
 
 // Board (0..63 - snow piles, 64..127 - targets)
-// board =
+board =
 // Unencoded track ([] + '' -> '')
-// track = [];
+track = [];
 
 /// Generate sound effect. It's 1/4 of a second of random
 /// samples scaled by a sine function to avoid clicking.
