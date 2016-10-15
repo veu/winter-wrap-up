@@ -22,8 +22,6 @@
 //) It's your job to move the remaining snow piles to spots of grass
 //) that have died during winter.
 //)
-//) Best played to http://www.youtube.com/watch?v=EETThhfzF_g
-//)
 //)// Controls ///////////////////////////////////////////////////////////
 //)
 //) * Use arrow keys to walk around and push snow piles
@@ -36,32 +34,6 @@
 //) * Audible snow moving
 //) * Last move can be undone
 //) * Resizes to window size
-//) * Pinkie Pie!
-//)
-//)// Updates ////////////////////////////////////////////////////////////
-//)
-//) Update 1:
-//) * Avoid setting invalid colors
-//) * Added animations
-//)
-//) Update 2:
-//) * Melting snow animation
-//) * Improved undo
-//) * More organic look
-//)
-//) Update 3:
-//) * Changed undo key to any but arrows
-//) * Removed resizing to width
-//) * Improved Pinkie
-//)
-//)// Used Characters ////////////////////////////////////////////////////
-//)
-//) In program:  A B C   E F G H I   K         P Q R S   U V W X Y Z
-//)              a b c d e f g h i   k l m n o p   r s t u v w   y
-//) Local vars:          e f     i   k               s t
-//) Global vars: A   C         H                   R S       W
-//)              a   c         h         m n o p   r         w   y z
-//)
 
 // Board (0..63 - snow piles, 64..127 - targets)
 board =

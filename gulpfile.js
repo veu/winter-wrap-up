@@ -27,7 +27,36 @@ gulp.task('join_assets', ['minify'], function () {
 gulp.task('minify', function () {
   return gulp.src('src/full.js')
     .pipe(babel({
-      plugins: [manglePlugin],
+      compact: true,
+      comments: false
+    }))
+    .pipe(babel({
+      plugins: [
+        [
+          manglePlugin,
+          {
+            excludedCharacters: [
+              'E' // because of Math.E
+            ],
+            namesToReplace: [
+              'drawArc',
+              'board',
+              'pinkieX',
+              'pinkieY',
+              'dx',
+              'dy',
+              'moved',
+              'track',
+              'drawP',
+              'active',
+              'movedSnow',
+              'sSource',
+              'animStep',
+              'sDest'
+            ]
+          }
+        ] 
+      ],
       compact: true,
       comments: false
     }))
