@@ -42,6 +42,11 @@ module.exports = function({types: t}) {
 
         const nameMap = new Map();
         for (const name of namesToReplace) {
+          if (availableNames.length === 0) {
+            console.log('Warning: not all variables could be replaced because all available characters');
+            console.log('         are used as variable names. Try reusing variables where possible.');
+            break;
+          }
           nameMap.set(name, availableNames.shift());
         }
 
