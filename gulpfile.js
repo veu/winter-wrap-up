@@ -41,8 +41,8 @@ gulp.task('minify', function () {
             namesToReplace: [
               'drawArc',
               'board',
-              'pinkieX',
-              'pinkieY',
+              'playerX',
+              'playerY',
               'dx',
               'dy',
               'moved',

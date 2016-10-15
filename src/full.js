@@ -19,7 +19,7 @@
 //)///////////////////////////////////////////////////////////////////////
 //)
 //) Before spring can start winter has to be cleaned up.
-//) It's your job to move the remaining snow piles to spots of grass
+//) It’s your job to move the remaining snow piles to spots of grass
 //) that have died during winter.
 //)
 //)// Controls ///////////////////////////////////////////////////////////
@@ -40,24 +40,24 @@ board =
 // Unencoded track ([] + '' -> '')
 track = [];
 
-/// Generate sound effect. It's 1/4 of a second of random
+/// Generate sound effect. It’s 1/4 of a second of random
 /// samples scaled by a sine function to avoid clicking.
 for(i=11e3; i--;)
   track += String.fromCharCode(sin(i/3501)*random()*6 + 128);
 
 /// Initialize game state
 for(i=64; i--;)
-  // Pinkie's position
-  pinkieX = pinkieY =
+  // Player’s position
+  playerX = playerY =
   // Amount of snow moved in last action
   movedSnow =
-  // Whether Pinkie moved in last action
+  // Whether player moved in last action
   moved =
   // Current step in 32-frame animation
   animStep =
   // Snow pile height
   board[i] =
-  // Pinkie's orientation
+  // Player’s orientation
   dx = 0, dy = 1;
 
 /// Generate dirt/target squares
@@ -78,11 +78,11 @@ drawArc = function(e, f, s, t) {
   fill()
 },
 
-/// Draw a circle that is part of Pinkie
+/// Draw a circle as part of player
 drawP = function(e, f, s, t) {
   // Add e and f to x or y depending on the orientation and animate
-  drawArc(pinkieX*32 - dy*f - (e+moved*animStep)*dx,
-          pinkieY*32 + dx*f - (e+moved*animStep)*dy, k*3||s, t/2+k/4)
+  drawArc(playerX*32 - dy*f - (e+moved*animStep)*dx,
+          playerY*32 + dx*f - (e+moved*animStep)*dy, k*3||s, t/2+k/4)
 },
 
 /// Handle input
@@ -94,24 +94,24 @@ onkeydown = function(e, f, s, t) {
 
     /// Undo last move (if snow was moved)
     k>>2 ? movedSnow && (
-      // Restore Pinkie's position
-      moved && (pinkieX -= dx, pinkieY -= dy),
+      // Restore player’s position
+      moved && (playerX -= dx, playerY -= dy),
       // Restore source square
       board[sSource] += movedSnow,
       // Restore destination square
       board[sDest] -= movedSnow,
-      // Make sure that undo can't be invoked twice
+      // Make sure that undo can’t be invoked twice
       movedSnow = 0
     )
 
-    /// Move Pinkie (if key is in 37..40)
+    /// Move player (if key is in 37..40)
     : 
       // Calculate movement from key and positions
       // of source and destination squares
-      (e = (dx = --k%2) + (s = pinkieX + dx),
-       f = (dy = --k%2) + (t = pinkieY + dy),
+      (e = (dx = --k%2) + (s = playerX + dx),
+       f = (dy = --k%2) + (t = playerY + dy),
 
-      // Move Pinkie only if source square is inside the board
+      // Move player only if source square is inside the board
        s|t)>>3 || (
         movedSnow = 0,
         // Calculate source index and remember for undo
@@ -123,13 +123,13 @@ onkeydown = function(e, f, s, t) {
           board[i] -= movedSnow,
           board[sDest] += movedSnow,
           // Encode track, add header and play sound. The last byte in the header is the first sample
-          // of the track. It's included to make the header length divisible by 3.
+          // of the track. It’s included to make the header length divisible by 3.
           movedSnow && new Audio('data:audio/wav;base64,UklGRh0rAABXQVZFZm10IBAAAAABAAEARKwAAESsAAABAAgAZGF0YfkqAACA' + btoa(track)).play()
         ),
         // Reset animation
         animStep = 32,
-        // Move Pinkie if the source square is empty
-        (moved = !board[i]) && (pinkieX = s, pinkieY = t)
+        // Move player if the source square is empty
+        (moved = !board[i]) && (playerX = s, playerY = t)
       )
   )
 },
@@ -147,7 +147,7 @@ setInterval(s = function(e, f, s, t) {
   /// Check for objective
   // The game is inactive
   for(i=64; i--;)
-    // ...unless one square has snow on it but isn't a target
+    // ...unless one square has snow on it but isn’t a target
     active |= board[i] && !board[i|64];
 
   /// Draw board
@@ -169,7 +169,7 @@ setInterval(s = function(e, f, s, t) {
           : drawArc(e, f+i%7, 3-k, k*2+i%2+1)
       );
 
-  /// Draw Pinkie
+  /// Draw player
   for(k=2;k--;)
     // Tail
     drawP(animStep?9:8, 0, 1, 5),
