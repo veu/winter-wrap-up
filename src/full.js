@@ -71,7 +71,7 @@ for(i=40; i--;)
   board[k = random()*6+1<<3|random()*6+1]&4 ? i++ : board[k]++;
 
 /// Draw a circle
-drawArc = function(e, f, s, t) {
+drawArc = (e, f, s, t) => {
   beginPath(),
   fillStyle = '#' + '694e57fbd742fffeeedddccc'.substr(s*3, 3),
   arc(e+16, f+16, t, 0, 7),
@@ -79,14 +79,14 @@ drawArc = function(e, f, s, t) {
 },
 
 /// Draw a circle as part of player
-drawP = function(e, f, s, t) {
+drawP = (e, f, s, t) => {
   // Add e and f to x or y depending on the orientation and animate
   drawArc(playerX*32 - dy*f - (e+moved*animStep)*dx,
           playerY*32 + dx*f - (e+moved*animStep)*dy, k*3||s, t/2+k/4)
 },
 
 /// Handle input
-onkeydown = function(e, f, s, t) {
+onkeydown = (e, f, s, t) => {
   // Do nothing if game is over
   active && (
     // Normalize key code.
@@ -135,7 +135,7 @@ onkeydown = function(e, f, s, t) {
 },
 
 /// Update game
-setInterval(s = function(e, f, s, t) {
+setInterval(s = (e, f, s, t) => {
   // Advance animation and draw background
   drawArc(animStep = animStep && animStep - 2, active = 0, 0,
     // Update canvas size
@@ -163,7 +163,7 @@ setInterval(s = function(e, f, s, t) {
         // Remove snow after game is over
         animStep>k<<3 || active
           // Draw snow
-          ? drawArc(e - (s = k<movedSnow && i==sDest)*dx*animStep,
+          ? drawArc(e - (s = k < movedSnow && i==sDest)*dx*animStep,
                     k*2 + f - s*dy*animStep + 2 - board[i]*2, k+4, k*2+6)
           // Draw flowers
           : drawArc(e, f+i%7, 3-k, k*2+i%2+1)
@@ -186,4 +186,3 @@ setInterval(s = function(e, f, s, t) {
       // Mane
       drawP(3-i*3, 2-i%2*3, 1, i*2+5)
 }, 20)
-//)
