@@ -52,7 +52,8 @@ gulp.task('minify', function () {
               'movedSnow',
               'sSource',
               'animStep',
-              'sDest'
+              'sDest',
+              'down',
             ]
           }
         ] 

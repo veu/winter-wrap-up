@@ -35,6 +35,24 @@
 //) * Last move can be undone
 //) * Resizes to window size
 
+document.querySelector('meta').setAttribute('content', `width=device-width,initial-scale=${s = 1 / window.devicePixelRatio},maximum-scale=${s},user-scalable=no`);
+
+down = 0;
+ontouchstart = (e, f, s, t) => {
+  e.touches.length > 1
+    ? e.preventDefault(down = 0)
+    : (e = e.changedTouches.item(0),
+      down = {x: e.pageX, y: e.pageY})
+};
+ontouchend = (e, f, s, t) => {
+    e = e.changedTouches.item(0);
+    down && (s = e.pageX - down.x) | (t = e.pageY - down.y)
+      && onkeydown({which:abs(s) > abs(t)?s<0?37:39:t<0?38:40});
+    down = 0  
+};
+ontouchmove = (e, f, s, t) =>
+  e.preventDefault(e.touches.length > 1 ? down = 0 : 0);
+
 // Board (0..63 - snow piles, 64..127 - targets)
 board =
 // Unencoded track ([] + '' -> '')
@@ -139,7 +157,7 @@ setInterval(s = (e, f, s, t) => {
   // Advance animation and draw background
   drawArc(animStep = animStep && animStep - 2, active = 0, 0,
     // Update canvas size
-    (s = c.height = c.width = innerHeight - 5) * 2
+    (s = c.height = c.width = min(innerWidth, innerHeight)) * 2
   ),
   // Scale board to canvas size
   scale(s /= 256, s);
