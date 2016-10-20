@@ -37,21 +37,19 @@
 
 document.querySelector('meta').setAttribute('content', `width=device-width,initial-scale=${s = 1 / window.devicePixelRatio},maximum-scale=${s},user-scalable=no`);
 
-down = 0;
+downX = 0;
 ontouchstart = (e, f, s, t) => {
-  e.touches.length > 1
-    ? e.preventDefault(down = 0)
-    : (e = e.changedTouches.item(0),
-      down = {x: e.pageX, y: e.pageY})
+  e = e.changedTouches.item(0);
+  downX = e.pageX;
+  downY = e.pageY
 };
 ontouchend = (e, f, s, t) => {
-    e = e.changedTouches.item(0);
-    down && (s = e.pageX - down.x) | (t = e.pageY - down.y)
-      && onkeydown({which:abs(s) > abs(t)?s<0?37:39:t<0?38:40});
-    down = 0  
+  e = e.changedTouches.item(0);
+  downX && (s = e.pageX - downX) | (t = e.pageY - downY)
+    && onkeydown({which:abs(s) > abs(t)?s<0?37:39:t<0?38:40})
 };
-ontouchmove = (e, f, s, t) =>
-  e.preventDefault(e.touches.length > 1 ? down = 0 : 0);
+ontouchmove = (e, f, s, t) => e.preventDefault();
+
 
 // Board (0..63 - snow piles, 64..127 - targets)
 board =

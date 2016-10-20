@@ -53,7 +53,8 @@ gulp.task('minify', function () {
               'sSource',
               'animStep',
               'sDest',
-              'down',
+              'downX',
+              'downY',
             ]
           }
         ] 
