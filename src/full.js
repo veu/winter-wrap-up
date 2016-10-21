@@ -38,18 +38,31 @@
 document.querySelector('meta').setAttribute('content', `width=device-width,initial-scale=${s = 1 / window.devicePixelRatio},maximum-scale=${s},user-scalable=no`);
 
 downX = 0;
-ontouchstart = (e, f, s, t) => {
+onclick = e => {
+  /// Undo last move (if snow was moved)
+  movedSnow && (
+    // Restore player’s position
+    moved && (playerX -= dx, playerY -= dy),
+    // Restore source square
+    board[sSource] += movedSnow,
+    // Restore destination square
+    board[sDest] -= movedSnow,
+    // Make sure that undo can’t be invoked twice
+    movedSnow = 0
+  )
+}
+ontouchstart = e => {
   e = e.changedTouches.item(0);
   downX = e.pageX;
   downY = e.pageY
 };
-ontouchend = (e, f, s, t) => {
+ontouchend = e => {
   e = e.changedTouches.item(0);
-  downX && (s = e.pageX - downX) | (t = e.pageY - downY)
-    && onkeydown({which:abs(s) > abs(t)?s<0?37:39:t<0?38:40})
+  downX && ((s = e.pageX - downX) | (t = e.pageY - downY)
+    ? onkeydown({which:abs(s) > abs(t) ? s<0?37:39 : t<0?38:40})
+    : onclick(e))
 };
-ontouchmove = (e, f, s, t) => e.preventDefault();
-
+ontouchmove = e => e.preventDefault();
 
 // Board (0..63 - snow piles, 64..127 - targets)
 board =
@@ -102,26 +115,12 @@ drawP = (e, f, s, t) => {
 },
 
 /// Handle input
-onkeydown = (e, f, s, t) => {
+onkeydown = e => {
   // Do nothing if game is over
   active && (
-    // Normalize key code.
-    k = e.which - 37,
-
-    /// Undo last move (if snow was moved)
-    k>>2 ? movedSnow && (
-      // Restore player’s position
-      moved && (playerX -= dx, playerY -= dy),
-      // Restore source square
-      board[sSource] += movedSnow,
-      // Restore destination square
-      board[sDest] -= movedSnow,
-      // Make sure that undo can’t be invoked twice
-      movedSnow = 0
-    )
-
     /// Move player (if key is in 37..40)
-    : 
+    // Normalize key code.
+    (k = e.which - 37) >> 2 ||    
       // Calculate movement from key and positions
       // of source and destination squares
       (e = (dx = --k%2) + (s = playerX + dx),
@@ -151,14 +150,19 @@ onkeydown = (e, f, s, t) => {
 },
 
 /// Update game
-setInterval(s = (e, f, s, t) => {
+setInterval(s = e => {
+  // Update canvas size
+  s = c.width = min(innerWidth, innerHeight * .85);
+  c.height = s / .85;
   // Advance animation and draw background
-  drawArc(animStep = animStep && animStep - 2, active = 0, 0,
-    // Update canvas size
-    (s = c.height = c.width = min(innerWidth, innerHeight)) * 2
-  ),
+  drawArc(animStep = animStep && animStep - 2, active = 0, 0, s * 2),
   // Scale board to canvas size
   scale(s /= 256, s);
+  fillStyle = '#000';
+  fillRect(0, 256, 256, 200);
+  fillStyle = '#fff';
+  fillText('Move all snow to brown spots. Keys or drag to move.', 9, 268);
+  fillText('Tap to undo.', 9, 280);
 
   /// Check for objective
   // The game is inactive
