@@ -152,16 +152,11 @@ onkeydown = e => {
 /// Update game
 setInterval(s = e => {
   // Update canvas size
-  c.height = (s = c.width = min(innerWidth, innerHeight * .85)) / .85;
+  s = c.width = c.height = min(innerWidth, innerHeight * .85);
   // Advance animation and draw background
   drawArc(animStep = animStep && animStep - 2, active = 0, 0, s * 2),
   // Scale board to canvas size
   scale(s /= 256, s);
-  fillStyle = '#' + '000';
-  fillRect(0, 256, 256, 200);
-  fillStyle = '#' + 'fff';
-  fillText('Move all snow to brown spots. Keys or drag to move.', 9, 268);
-  fillText('Tap to undo.', 9, 280);
 
   /// Check for objective
   // The game is inactive
@@ -182,8 +177,8 @@ setInterval(s = e => {
         // Remove snow after game is over
         animStep>k<<3 || active
           // Draw snow
-          ? drawArc(e - (s = k < movedSnow && i==sDest)*dx*animStep,
-                    k*2 + f - s*dy*animStep + 2 - board[i]*2, k+4, k*2+6)
+          ? drawArc(e - (k < movedSnow && i==sDest)*dx*animStep,
+                    k*2 + f + 2 - board[i]*2 - (k < movedSnow && i==sDest)*dy*animStep, k+4, k*2+6)
           // Draw flowers
           : drawArc(e, f+i%7, 3-k, k*2+i%2+1)
       );
