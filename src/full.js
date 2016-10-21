@@ -152,15 +152,14 @@ onkeydown = e => {
 /// Update game
 setInterval(s = e => {
   // Update canvas size
-  s = c.width = min(innerWidth, innerHeight * .85);
-  c.height = s / .85;
+  c.height = (s = c.width = min(innerWidth, innerHeight * .85)) / .85;
   // Advance animation and draw background
   drawArc(animStep = animStep && animStep - 2, active = 0, 0, s * 2),
   // Scale board to canvas size
   scale(s /= 256, s);
-  fillStyle = '#000';
+  fillStyle = '#' + '000';
   fillRect(0, 256, 256, 200);
-  fillStyle = '#fff';
+  fillStyle = '#' + 'fff';
   fillText('Move all snow to brown spots. Keys or drag to move.', 9, 268);
   fillText('Tap to undo.', 9, 280);
 
