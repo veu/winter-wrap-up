@@ -3,6 +3,8 @@
 My [JS1k 2013 entry](http://js1k.com/2013-spring/demo/1460) as a 1.3k zipped standalone demo.
 This is a proof of concept to show that you can fit a game into this size.
 
+[Play it here](https://veu.github.io/winter-wrap-up/dist/index.html).
+
 ## Features
 
 * Infinite random levels
