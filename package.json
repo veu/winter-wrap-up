@@ -10,6 +10,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",
     "gulp-size": "^2.1.0",
+    "gulp-watch": "^4.3.10",
     "gulp-zip": "^3.2.0"
   }
 }

@@ -5,9 +5,11 @@ const manglePlugin = require('./babel/mangle-plugin');
 const rename = require('gulp-rename');
 const replace = require('gulp-replace');
 const size = require('gulp-size');
+const watch = require('gulp-watch');
 const zip = require('gulp-zip');
 
 gulp.task('default', ['zip'], function () {
+  gulp.watch('src/*', ['zip']);
 });
 
 gulp.task('zip', ['join_assets'], function () {
