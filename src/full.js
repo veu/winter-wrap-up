@@ -59,7 +59,7 @@ ontouchstart = e => {
 ontouchend = e => {
   e = e.changedTouches.item(0);
   downX && ((s = e.pageX - downX) | (t = e.pageY - downY)
-    ? onkeydown({which:abs(s) > abs(t) ? s<0?37:39 : t<0?38:40})
+    ? onkeydown({which:s*s > t*t ? s<0?37:39 : t<0?38:40})
     : onclick(e))
 };
 ontouchmove = e => e.preventDefault();
