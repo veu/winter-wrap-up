@@ -153,7 +153,7 @@ move = k => {
 },
 
 /// Update game
-setInterval(s = e => {
+setInterval(e => {
   // Update canvas size
   s = c.width = c.height = min(innerWidth, innerHeight * .85),
   // Advance animation and draw background
@@ -169,7 +169,7 @@ setInterval(s = e => {
 
   /// Draw board
   for(i=64; i--;)
-    drawArc(e = i/8<<5, f = i%8*32, active&&board[i|64], i%3+14);
+    drawArc(i/8<<5, i%8*32, active&&board[i|64], i%3+14);
 
   /// Draw snow piles or flowers
   for(k=4; k--;)
