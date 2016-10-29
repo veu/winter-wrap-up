@@ -37,7 +37,6 @@
 
 document.querySelector('meta').setAttribute('content', `width=device-width,initial-scale=${s = 1 / window.devicePixelRatio},maximum-scale=${s},user-scalable=no`);
 
-downX = 0;
 onclick = e => {
   /// Undo last move (if snow was moved)
   movedSnow && (
