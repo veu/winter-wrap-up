@@ -49,19 +49,20 @@ onclick = e => {
     // Make sure that undo can’t be invoked twice
     movedSnow = 0
   )
-}
+},
+
 ontouchstart = e => {
-  e = e.changedTouches.item(0);
-  downX = e.pageX;
+  e = e.changedTouches.item(0),
+  downX = e.pageX,
   downY = e.pageY
-};
+},
 ontouchend = e => {
-  e = e.changedTouches.item(0);
+  e = e.changedTouches.item(0),
   downX && ((s = e.pageX - downX) | (t = e.pageY - downY)
     ? move(s*s > t*t ? (s>0)*2 : (t>0)*2+1)
     : onclick(e))
-};
-ontouchmove = e => e.preventDefault();
+},
+ontouchmove = e => e.preventDefault(),
 
 // Board (0..63 - snow piles, 64..127 - targets)
 board =
@@ -114,7 +115,7 @@ drawP = (e, f, s, t) => {
 },
 
 /// Handle input
-onkeydown = e => move(e.which - 37);
+onkeydown = e => move(e.which - 37),
 
 /// Move player and snow
 move = k => {
@@ -154,7 +155,7 @@ move = k => {
 /// Update game
 setInterval(s = e => {
   // Update canvas size
-  s = c.width = c.height = min(innerWidth, innerHeight * .85);
+  s = c.width = c.height = min(innerWidth, innerHeight * .85),
   // Advance animation and draw background
   drawArc(animStep = animStep && animStep - 2, active = 0, 0, s * 2),
   // Scale board to canvas size
