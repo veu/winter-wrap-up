@@ -59,7 +59,7 @@ ontouchstart = e => {
 ontouchend = e => {
   e = e.changedTouches.item(0);
   downX && ((s = e.pageX - downX) | (t = e.pageY - downY)
-    ? onkeydown({which:s*s > t*t ? s<0?37:39 : t<0?38:40})
+    ? move(s*s > t*t ? (s>0)*2 : (t>0)*2+1)
     : onclick(e))
 };
 ontouchmove = e => e.preventDefault();
@@ -115,12 +115,15 @@ drawP = (e, f, s, t) => {
 },
 
 /// Handle input
-onkeydown = e => {
+onkeydown = e => move(e.which - 37);
+
+/// Move player and snow
+move = k => {
   // Do nothing if game is over
   active && (
     /// Move player (if key is in 37..40)
     // Normalize key code.
-    (k = e.which - 37) >> 2 ||    
+    k >> 2 ||    
       // Calculate movement from key and positions
       // of source and destination squares
       (e = (dx = --k%2) + (s = playerX + dx),

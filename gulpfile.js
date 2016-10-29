@@ -57,6 +57,7 @@ gulp.task('minify', function () {
               'sDest',
               'downX',
               'downY',
+              'move',
             ]
           }
         ] 
