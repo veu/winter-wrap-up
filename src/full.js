@@ -118,16 +118,16 @@ drawP = (e, f, s, t) => {
 onkeydown = e => move(e.which - 37),
 
 /// Move player and snow
-move = k => {
+move = e => {
   // Do nothing if game is over
   active && (
     /// Move player (if key is in 37..40)
     // Normalize key code.
-    k >> 2 ||    
+    e >> 2 ||
       // Calculate movement from key and positions
       // of source and destination squares
-      (e = (dx = --k%2) + (s = playerX + dx),
-       f = (dy = --k%2) + (t = playerY + dy),
+      (k = (dx = --e%2) + (s = playerX + dx),
+       f = (dy = --e%2) + (t = playerY + dy),
 
       // Move player only if source square is inside the board
        s|t)>>3 || (
@@ -135,9 +135,9 @@ move = k => {
         // Calculate source index and remember for undo
         i = sSource = s<<3|t,
         // Move snow only if destination is inside the board
-        (e|f)>>3 || (
+        (k|f)>>3 || (
           /// Move snow and remember destination
-          movedSnow = min(4 - board[sDest=e<<3|f], board[i]),
+          movedSnow = min(4 - board[sDest=k<<3|f], board[i]),
           board[i] -= movedSnow,
           board[sDest] += movedSnow,
           // Encode track, add header and play sound. The last byte in the header is the first sample
