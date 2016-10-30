@@ -133,12 +133,12 @@ move = e => {
        s|t)>>3 || (
         movedSnow = 0,
         // Calculate source index and remember for undo
-        i = sSource = s<<3|t,
+        sSource = s<<3|t,
         // Move snow only if destination is inside the board
         (k|f)>>3 || (
           /// Move snow and remember destination
-          movedSnow = min(4 - board[sDest=k<<3|f], board[i]),
-          board[i] -= movedSnow,
+          movedSnow = min(4 - board[sDest=k<<3|f], board[sSource]),
+          board[sSource] -= movedSnow,
           board[sDest] += movedSnow,
           // Encode track, add header and play sound. The last byte in the header is the first sample
           // of the track. It’s included to make the header length divisible by 3.
@@ -147,7 +147,7 @@ move = e => {
         // Reset animation
         animStep = 32,
         // Move player if the source square is empty
-        (moved = !board[i]) && (playerX = s, playerY = t)
+        (moved = !board[sSource]) && (playerX = s, playerY = t)
       )
   )
 },
