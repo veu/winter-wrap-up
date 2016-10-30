@@ -49,7 +49,9 @@ ontouchstart = e => {
 },
 ontouchend = e => {
   e = e.changedTouches.item(0),
-  (s = e.pageX - downX) | (t = e.pageY - downY)
+  s = e.pageX - downX,
+  t = e.pageY - downY,
+  s|t
     ? move(s*s > t*t ? (s>0)*2 : (t>0)*2+1)
     : onclick()
 },
