@@ -105,7 +105,9 @@ ontouchend = e => {
     ? move(s*s > t*t ? (s>0)*2 : (t>0)*2+1)
     : onclick()
 },
-ontouchmove = e => e.preventDefault(),
+ontouchmove = e => {
+  e.preventDefault()
+},
 
 // Board (0..63 - snow piles, 64..127 - targets)
 board =
@@ -166,7 +168,9 @@ drawP = (e, f, s, t) => {
 },
 
 /// Handle input
-onkeydown = e => move(e.which - 37),
+onkeydown = e => {
+  move(e.which - 37)
+},
 
 /// Move player and snow
 move = e => {
