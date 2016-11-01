@@ -35,7 +35,7 @@
 //) * Last move can be undone
 //) * Resizes to window size
 
-document.querySelector('meta').setAttribute('content', `width=device-width,initial-scale=${s = 1 / window.devicePixelRatio},maximum-scale=${s},user-scalable=no`);
+m.setAttribute('content', `width=device-width,initial-scale=${s = 1 / window.devicePixelRatio},maximum-scale=${s},user-scalable=no`);
 
 onclick = e => {
   started 
