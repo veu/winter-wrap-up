@@ -38,8 +38,60 @@
 document.querySelector('meta').setAttribute('content', `width=device-width,initial-scale=${s = 1 / window.devicePixelRatio},maximum-scale=${s},user-scalable=no`);
 
 onclick = e => {
-  // Undo last move
-  undo[0] && ([playerX, playerY, dx, dy, ...board] = undo.pop())
+  started 
+    // Undo last move
+    ? undo[0] && ([playerX, playerY, dx, dy, ...board] = undo.pop())
+    /// Update game
+    : audio.play(started = setInterval(e => {
+      // Update canvas size
+      s = c.width = c.height = min(innerWidth, innerHeight * .85),
+      // Advance animation and draw background
+      drawArc(animStep = animStep && animStep - 2, active = 0, 0, s * 2),
+      // Scale board to canvas size
+      scale(s /= 256, s);
+
+      /// Check for objective
+      // The game is inactive
+      for(i=64; i--;)
+        // ...unless one square has snow on it but isn’t a target
+        active |= board[i] && !board[i|64];
+
+      /// Draw board
+      for(i=64; i--;)
+        drawArc(i/8<<5, i%8*32, active&&board[i|64], i%3+14);
+
+      /// Draw snow piles or flowers
+      for(k=4; k--;)
+        for(i=64; i--;)
+          // Draw until snow height is reached
+          board[i]>k && (
+            e = i/8<<5, f = i%8*32,
+            // Remove snow after game is over
+            animStep>k<<3 || active
+              // Draw snow
+              ? drawArc(e - (k < movedSnow && i==sDest)*dx*animStep,
+                        k*2 + f + 2 - board[i]*2 - (k < movedSnow && i==sDest)*dy*animStep, k+4, k*2+6)
+              // Draw flowers
+              : drawArc(e, f+i%7, 3-k, k*2+i%2+1)
+          );
+
+      /// Draw player
+      for(k=2;k--;)
+        // Tail
+        drawP(animStep?9:8, 0, 1, 5),
+        // Head
+        drawP(-7, 0, 2, 12);
+      for(k=2;k--;)
+        /// Body
+        for(i=8; i--;)
+          drawP(4-i, 0, 2, 9);
+      for(k=2;k--;)
+        for(i=4; i--;)
+          // Eyes
+          drawP(i%2/2-12, i%2*3+3-i*3, i%2+3, 1+i%2/2),
+          // Mane
+          drawP(3-i*3, 2-i%2*3, 1, i*2+5)
+    }, 20))
 },
 
 ontouchstart = e => {
@@ -69,6 +121,12 @@ undo = [];
 for(i=11e3; i--;)
   track += String.fromCharCode(sin(i/3501)*random()*6 + 128);
 
+audio = new Audio(
+  // Encode track, add header and play sound. The last byte in the header is the first sample
+  // of the track. It’s included to make the header length divisible by 3.
+  'data:audio/wav;base64,UklGRh0rAABXQVZFZm10IBAAAAABAAEARKwAAESsAAABAAgAZGF0YfkqAACA' + btoa(track)
+);
+
 /// Initialize game state
 for(i=64; i--;)
   // Player’s position
@@ -82,7 +140,7 @@ for(i=64; i--;)
   // Snow pile height
   board[i] =
   // Player’s orientation
-  dx = 0, dy = 1;
+  dx = started = 0, dy = 1;
 
 /// Generate dirt/target squares
 for(i=10; i--;)
@@ -134,14 +192,11 @@ move = e => {
         // Move snow only if destination is inside the board
         (k|f)>>3 ||
           /// Move snow and remember destination
-          (movedSnow = min(4 - board[sDest=k<<3|f], board[sSource])) && new Audio(
-            // Encode track, add header and play sound. The last byte in the header is the first sample
-            // of the track. It’s included to make the header length divisible by 3.
-            'data:audio/wav;base64,UklGRh0rAABXQVZFZm10IBAAAAABAAEARKwAAESsAAABAAgAZGF0YfkqAACA' + btoa(track),
+          (movedSnow = min(4 - board[sDest=k<<3|f], board[sSource])) && audio.play(
             // Move snow
             board[sSource] -= movedSnow,
             board[sDest] += movedSnow
-          ).play(),
+          ),
         // Reset animation
         animStep = 32,
         // Move player if the source square is empty
@@ -150,56 +205,4 @@ move = e => {
       // Remove undo info if nothing happened
       moved || movedSnow || undo.pop()
   )
-},
-
-/// Update game
-setInterval(e => {
-  // Update canvas size
-  s = c.width = c.height = min(innerWidth, innerHeight * .85),
-  // Advance animation and draw background
-  drawArc(animStep = animStep && animStep - 2, active = 0, 0, s * 2),
-  // Scale board to canvas size
-  scale(s /= 256, s);
-
-  /// Check for objective
-  // The game is inactive
-  for(i=64; i--;)
-    // ...unless one square has snow on it but isn’t a target
-    active |= board[i] && !board[i|64];
-
-  /// Draw board
-  for(i=64; i--;)
-    drawArc(i/8<<5, i%8*32, active&&board[i|64], i%3+14);
-
-  /// Draw snow piles or flowers
-  for(k=4; k--;)
-    for(i=64; i--;)
-      // Draw until snow height is reached
-      board[i]>k && (
-        e = i/8<<5, f = i%8*32,
-        // Remove snow after game is over
-        animStep>k<<3 || active
-          // Draw snow
-          ? drawArc(e - (k < movedSnow && i==sDest)*dx*animStep,
-                    k*2 + f + 2 - board[i]*2 - (k < movedSnow && i==sDest)*dy*animStep, k+4, k*2+6)
-          // Draw flowers
-          : drawArc(e, f+i%7, 3-k, k*2+i%2+1)
-      );
-
-  /// Draw player
-  for(k=2;k--;)
-    // Tail
-    drawP(animStep?9:8, 0, 1, 5),
-    // Head
-    drawP(-7, 0, 2, 12);
-  for(k=2;k--;)
-    /// Body
-    for(i=8; i--;)
-      drawP(4-i, 0, 2, 9);
-  for(k=2;k--;)
-    for(i=4; i--;)
-      // Eyes
-      drawP(i%2/2-12, i%2*3+3-i*3, i%2+3, 1+i%2/2),
-      // Mane
-      drawP(3-i*3, 2-i%2*3, 1, i*2+5)
-}, 20)
+}

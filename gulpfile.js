@@ -59,6 +59,7 @@ gulp.task('minify', function () {
               'downY',
               'move',
               'undo',
+              'started',
             ]
           }
         ] 
