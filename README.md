@@ -9,7 +9,7 @@ This is a proof of concept to show that you can fit a game into this size.
 
 * Infinite random levels
 * Audible snow moving
-* Last move can be undone
-* Resizes to window size
+* All moves can be undone
+* Resizes to window height
 * Works on desktop and mobile
 * In-game help
