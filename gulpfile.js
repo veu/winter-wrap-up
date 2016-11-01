@@ -59,6 +59,7 @@ gulp.task('minify', function () {
               'move',
               'undo',
               'started',
+              'audio',
             ]
           }
         ] 
