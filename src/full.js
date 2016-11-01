@@ -35,7 +35,7 @@
 //) * Last move can be undone
 //) * Resizes to window size
 
-document.querySelector('meta').setAttribute('content', `width=device-width,initial-scale=${s = 1 / window.devicePixelRatio},maximum-scale=${s},user-scalable=no`);
+m.setAttribute('content', `width=device-width,initial-scale=${s = 1 / window.devicePixelRatio},maximum-scale=${s},user-scalable=no`);
 
 onclick = e => {
   // Undo last move
@@ -43,19 +43,19 @@ onclick = e => {
 },
 
 ontouchstart = e => {
-  e = e.changedTouches.item(0),
-  downX = e.pageX,
-  downY = e.pageY
+  down = e.changedTouches.item(0)
 },
 ontouchend = e => {
   e = e.changedTouches.item(0),
-  s = e.pageX - downX,
-  t = e.pageY - downY,
+  s = e.pageX - down.pageX,
+  t = e.pageY - down.pageY,
   s|t
-    ? move(s*s > t*t ? (s>0)*2 : (t>0)*2+1)
-    : onclick()
+    ? started && move(s*s > t*t ? (s>0)*2 : (t>0)*2+1)
+    : started ? onclick() : audio.play(started = 1)
 },
-ontouchmove = e => e.preventDefault(),
+ontouchmove = e => {
+  e.preventDefault()
+},
 
 // Board (0..63 - snow piles, 64..127 - targets)
 board =
@@ -68,6 +68,12 @@ undo = [];
 /// samples scaled by a sine function to avoid clicking.
 for(i=11e3; i--;)
   track += String.fromCharCode(sin(i/3501)*random()*6 + 128);
+
+audio = new Audio(
+  // Encode track, add header and play sound. The last byte in the header is the first sample
+  // of the track. It’s included to make the header length divisible by 3.
+  'data:audio/wav;base64,UklGRh0rAABXQVZFZm10IBAAAAABAAEARKwAAESsAAABAAgAZGF0YfkqAACA' + btoa(track)
+);
 
 /// Initialize game state
 for(i=64; i--;)
@@ -82,7 +88,7 @@ for(i=64; i--;)
   // Snow pile height
   board[i] =
   // Player’s orientation
-  dx = 0, dy = 1;
+  dx = started = 0, dy = 1;
 
 /// Generate dirt/target squares
 for(i=10; i--;)
@@ -110,7 +116,9 @@ drawP = (e, f, s, t) => {
 },
 
 /// Handle input
-onkeydown = e => move(e.which - 37),
+onkeydown = e => {
+  move(e.which - 37)
+},
 
 /// Move player and snow
 move = e => {
@@ -134,14 +142,11 @@ move = e => {
         // Move snow only if destination is inside the board
         (k|f)>>3 ||
           /// Move snow and remember destination
-          (movedSnow = min(4 - board[sDest=k<<3|f], board[sSource])) && new Audio(
-            // Encode track, add header and play sound. The last byte in the header is the first sample
-            // of the track. It’s included to make the header length divisible by 3.
-            'data:audio/wav;base64,UklGRh0rAABXQVZFZm10IBAAAAABAAEARKwAAESsAAABAAgAZGF0YfkqAACA' + btoa(track),
+          (movedSnow = min(4 - board[sDest=k<<3|f], board[sSource])) && audio.play(
             // Move snow
             board[sSource] -= movedSnow,
             board[sDest] += movedSnow
-          ).play(),
+          ),
         // Reset animation
         animStep = 32,
         // Move player if the source square is empty
@@ -150,7 +155,7 @@ move = e => {
       // Remove undo info if nothing happened
       moved || movedSnow || undo.pop()
   )
-},
+}
 
 /// Update game
 setInterval(e => {

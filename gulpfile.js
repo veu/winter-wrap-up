@@ -55,10 +55,11 @@ gulp.task('minify', function () {
               'sSource',
               'animStep',
               'sDest',
-              'downX',
-              'downY',
+              'down',
               'move',
               'undo',
+              'started',
+              'audio',
             ]
           }
         ] 
